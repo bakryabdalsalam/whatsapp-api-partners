@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>WhatsApp API Partner Pricing Plan</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f4f7f5;
+      --panel: #ffffff;
+      --text: #16231d;
+      --muted: #607168;
+      --line: #d9e3dc;
+      --accent: #128c7e;
+      --accent-dark: #075e54;
+      --accent-soft: #d8f3ec;
+      --warn: #856404;
+      --warn-bg: #fff7d6;
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 72px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: var(--accent-dark);
+      color: white;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: 750;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 7px;
+      font: inherit;
+      font-size: 14px;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    button:hover {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
+    button[aria-pressed="true"] {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 28px auto 56px;
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    nav {
+      position: sticky;
+      top: 96px;
+      max-height: calc(100vh - 120px);
+      overflow: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: 14px;
+    }
+
+    nav h2 {
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    nav a {
+      display: block;
+      padding: 7px 8px;
+      border-radius: 6px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    nav a:hover {
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    article {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--panel);
+      padding: clamp(22px, 4vw, 48px);
+      box-shadow: 0 16px 40px rgba(16, 40, 30, 0.08);
+    }
+
+    .status {
+      margin: 0 0 18px;
+      padding: 12px 14px;
+      border-radius: 7px;
+      background: var(--warn-bg);
+      color: var(--warn);
+      font-size: 14px;
+      display: none;
+    }
+
+    article h1,
+    article h2,
+    article h3 {
+      line-height: 1.2;
+      color: #10281f;
+    }
+
+    article h1 {
+      margin: 0 0 14px;
+      font-size: clamp(30px, 4vw, 48px);
+    }
+
+    article h2 {
+      margin: 34px 0 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line);
+      font-size: clamp(21px, 2.4vw, 30px);
+    }
+
+    article h3 {
+      margin: 26px 0 10px;
+      font-size: 19px;
+    }
+
+    article p {
+      margin: 0 0 15px;
+    }
+
+    article ul,
+    article ol {
+      margin: 0 0 18px;
+      padding-inline-start: 24px;
+    }
+
+    article li {
+      margin: 7px 0;
+    }
+
+    article a {
+      color: var(--accent-dark);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      margin: 18px 0 24px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 700px;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th,
+    td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+      text-align: start;
+    }
+
+    th {
+      background: #eff7f3;
+      color: #17392f;
+      font-weight: 750;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    code {
+      background: #edf2ef;
+      padding: 2px 5px;
+      border-radius: 5px;
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    body[dir="rtl"] {
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    }
+
+    body[dir="rtl"] .brand {
+      flex-direction: row-reverse;
+    }
+
+    body[dir="rtl"] .actions {
+      justify-content: flex-start;
+    }
+
+    body[dir="rtl"] table {
+      direction: rtl;
+    }
+
+    @media (max-width: 860px) {
+      .topbar {
+        min-height: 88px;
+        align-items: flex-start;
+        padding: 14px 0;
+        flex-direction: column;
+      }
+
+      .brand h1 {
+        white-space: normal;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+        margin-top: 18px;
+      }
+
+      nav {
+        position: static;
+        max-height: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">WA</div>
+        <div>
+          <h1 id="page-title">WhatsApp API Partner Pricing Plan</h1>
+          <p id="page-subtitle">Markdown research viewer</p>
+        </div>
+      </div>
+      <div class="actions" aria-label="Language">
+        <button type="button" id="englishBtn" aria-pressed="true">English</button>
+        <button type="button" id="arabicBtn" aria-pressed="false">العربية</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <nav aria-label="Document sections">
+      <h2 id="toc-title">Sections</h2>
+      <div id="toc"></div>
+    </nav>
+    <article>
+      <p class="status" id="status"></p>
+      <div id="content"></div>
+    </article>
+  </main>
+
+  <script>
+    const docs = {
+      en: {
+        file: "whatsapp_api_partner_pricing_plan.md",
+        title: "WhatsApp API Partner Pricing Plan",
+        subtitle: "Markdown research viewer",
+        toc: "Sections",
+        dir: "ltr",
+        lang: "en"
+      },
+      ar: {
+        file: "whatsapp_api_partner_pricing_plan_ar.md",
+        title: "خطة شراكة WhatsApp API والتسعير",
+        subtitle: "عارض بحث Markdown",
+        toc: "الأقسام",
+        dir: "rtl",
+        lang: "ar"
+      }
+    };
+
+    const content = document.getElementById("content");
+    const toc = document.getElementById("toc");
+    const statusBox = document.getElementById("status");
+    const englishBtn = document.getElementById("englishBtn");
+    const arabicBtn = document.getElementById("arabicBtn");
+    const title = document.getElementById("page-title");
+    const subtitle = document.getElementById("page-subtitle");
+    const tocTitle = document.getElementById("toc-title");
+
+    function escapeHtml(value) {
+      return value
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function inlineMarkdown(value) {
+      let output = escapeHtml(value);
+      output = output.replace(/`([^`]+)`/g, "<code>$1</code>");
+      output = output.replace(/\[([^\]]+)\]\((https?:\/\/[^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      output = output.replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, '$1<a href="$2" target="_blank" rel="noopener">$2</a>');
+      output = output.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      return output;
+    }
+
+    function slugify(text, index) {
+      const base = text
+        .toLowerCase()
+        .trim()
+        .replace(/[^\p{L}\p{N}]+/gu, "-")
+        .replace(/^-+|-+$/g, "");
+      return base || `section-${index}`;
+    }
+
+    function isTableStart(lines, index) {
+      return (
+        index + 1 < lines.length &&
+        /^\s*\|.*\|\s*$/.test(lines[index]) &&
+        /^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[index + 1])
+      );
+    }
+
+    function parseTable(lines, start) {
+      const rows = [];
+      let index = start;
+      while (index < lines.length && /^\s*\|.*\|\s*$/.test(lines[index])) {
+        rows.push(lines[index]);
+        index += 1;
+      }
+
+      const header = splitTableRow(rows[0]);
+      const body = rows.slice(2).map(splitTableRow);
+      const headHtml = header.map(cell => `<th>${inlineMarkdown(cell.trim())}</th>`).join("");
+      const bodyHtml = body.map(row => `<tr>${row.map(cell => `<td>${inlineMarkdown(cell.trim())}</td>`).join("")}</tr>`).join("");
+
+      return {
+        html: `<div class="table-wrap"><table><thead><tr>${headHtml}</tr></thead><tbody>${bodyHtml}</tbody></table></div>`,
+        next: index
+      };
+    }
+
+    function splitTableRow(row) {
+      return row.trim().replace(/^\|/, "").replace(/\|$/, "").split("|");
+    }
+
+    function flushParagraph(parts, html) {
+      if (parts.length) {
+        html.push(`<p>${inlineMarkdown(parts.join(" "))}</p>`);
+        parts.length = 0;
+      }
+    }
+
+    function parseMarkdown(markdown) {
+      const lines = markdown.replace(/\r\n/g, "\n").split("\n");
+      const html = [];
+      const headings = [];
+      const paragraph = [];
+      let index = 0;
+
+      while (index < lines.length) {
+        const line = lines[index];
+
+        if (!line.trim()) {
+          flushParagraph(paragraph, html);
+          index += 1;
+          continue;
+        }
+
+        const heading = /^(#{1,3})\s+(.+)$/.exec(line);
+        if (heading) {
+          flushParagraph(paragraph, html);
+          const level = heading[1].length;
+          const text = heading[2].trim();
+          const id = slugify(text, headings.length + 1);
+          headings.push({ level, text, id });
+          html.push(`<h${level} id="${id}">${inlineMarkdown(text)}</h${level}>`);
+          index += 1;
+          continue;
+        }
+
+        if (isTableStart(lines, index)) {
+          flushParagraph(paragraph, html);
+          const table = parseTable(lines, index);
+          html.push(table.html);
+          index = table.next;
+          continue;
+        }
+
+        if (/^\s*[-*]\s+/.test(line)) {
+          flushParagraph(paragraph, html);
+          const items = [];
+          while (index < lines.length && /^\s*[-*]\s+/.test(lines[index])) {
+            items.push(lines[index].replace(/^\s*[-*]\s+/, ""));
+            index += 1;
+          }
+          html.push(`<ul>${items.map(item => `<li>${inlineMarkdown(item)}</li>`).join("")}</ul>`);
+          continue;
+        }
+
+        if (/^\s*\d+\.\s+/.test(line)) {
+          flushParagraph(paragraph, html);
+          const items = [];
+          while (index < lines.length && /^\s*\d+\.\s+/.test(lines[index])) {
+            items.push(lines[index].replace(/^\s*\d+\.\s+/, ""));
+            index += 1;
+          }
+          html.push(`<ol>${items.map(item => `<li>${inlineMarkdown(item)}</li>`).join("")}</ol>`);
+          continue;
+        }
+
+        paragraph.push(line.trim());
+        index += 1;
+      }
+
+      flushParagraph(paragraph, html);
+      return { html: html.join("\n"), headings };
+    }
+
+    async function loadDoc(language) {
+      const doc = docs[language];
+      document.documentElement.lang = doc.lang;
+      document.body.dir = doc.dir;
+      title.textContent = doc.title;
+      subtitle.textContent = doc.subtitle;
+      tocTitle.textContent = doc.toc;
+      englishBtn.setAttribute("aria-pressed", language === "en");
+      arabicBtn.setAttribute("aria-pressed", language === "ar");
+      location.hash = language;
+
+      try {
+        statusBox.style.display = "none";
+        const response = await fetch(doc.file, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Could not load ${doc.file}`);
+        const markdown = new TextDecoder("utf-8").decode(await response.arrayBuffer());
+        const rendered = parseMarkdown(markdown);
+        content.innerHTML = rendered.html;
+        toc.innerHTML = rendered.headings
+          .filter(item => item.level <= 2)
+          .map(item => `<a href="#${item.id}">${inlineMarkdown(item.text)}</a>`)
+          .join("");
+      } catch (error) {
+        content.innerHTML = "";
+        toc.innerHTML = "";
+        statusBox.style.display = "block";
+        statusBox.textContent = "Could not load the Markdown file. Serve this folder with a local web server, then open index.html through http://localhost.";
+      }
+    }
+
+    englishBtn.addEventListener("click", () => loadDoc("en"));
+    arabicBtn.addEventListener("click", () => loadDoc("ar"));
+
+    const initialLanguage = location.hash.replace("#", "") === "ar" ? "ar" : "en";
+    loadDoc(initialLanguage);
+  </script>
+</body>
+</html>
