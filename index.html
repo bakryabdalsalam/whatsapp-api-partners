@@ -118,6 +118,26 @@
       color: #fff;
     }
 
+    .actions a {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      min-height: 38px;
+      padding: 0 14px;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 650;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .actions a:hover {
+      border-color: var(--accent);
+      color: var(--accent-dark);
+    }
+
     main {
       width: min(1180px, calc(100% - 32px));
       margin: 28px auto 56px;
@@ -316,6 +336,7 @@
         </div>
       </div>
       <div class="actions" aria-label="Language">
+        <a href="visual.html">Visual Summary</a>
         <button type="button" id="englishBtn" aria-pressed="true">English</button>
         <button type="button" id="arabicBtn" aria-pressed="false">العربية</button>
       </div>

@@ -301,6 +301,251 @@ The market is already crowded. Our differentiation should not be "we provide Wha
 4. Partner/agency tooling for onboarding multiple customers.
 5. Clean compliance, opt-in, template review, and customer spend dashboards.
 
+## 19. Karzoun-Style Business Model With WhatsApp AI Agent and Voice Replies
+
+Last checked: 2026-07-07
+
+Karzoun's public site positions the product as an Arabic customer conversation platform: one inbox for WhatsApp, Facebook, Instagram, email, website chat, Telegram, and API integrations; automation and chatbots; team assignment; labels and private notes; reports; mobile apps; official WhatsApp API onboarding; and AI/OpenAI in the higher package. The public pricing shown on the site is monthly SaaS packages by seats/channels/features, with packages around 49 USD, 99 USD, and 399 USD per month at the time checked.
+
+Official source reviewed: https://karzoun.chat/
+
+### Business model we should build
+
+Do not copy the brand. Copy the category:
+
+"Arabic-first WhatsApp customer engagement SaaS for sales, support, automation, AI agents, and voice-note replies."
+
+The product should have four revenue layers:
+
+1. Platform subscription
+   - Charge monthly by seats, connected channels, automation depth, reporting, and support level.
+   - Example packages:
+     - Starter: 1-2 users, 1 WhatsApp number, shared inbox, labels, quick replies.
+     - Business: 5-10 users, routing, chatbot builder, broadcast/template tools, reports.
+     - Business Pro: 15+ users, AI agent, voice-note AI, custom automation, API, dedicated support.
+
+2. WhatsApp/Meta message fees
+   - Keep Meta fees as pass-through fees.
+   - Show category, country, free/paid status, and estimated cost in the dashboard.
+   - This preserves the "minimum message price" strategy from the original plan.
+
+3. AI usage add-on
+   - Charge separately for AI text replies, AI voice-note transcription, and AI generated voice replies.
+   - Use package quotas such as included AI conversations, included voice minutes, then overage pricing.
+   - This avoids losing margin when a client has heavy AI usage.
+
+4. Services and partner revenue
+   - Setup fee for WhatsApp API onboarding, Meta Business verification, templates, and automation setup.
+   - Managed chatbot/AI setup service.
+   - Monthly managed support for clients who want us to maintain automations.
+   - Reseller/agency program for marketing agencies and software houses.
+
+### Recommended MVP
+
+Launch with WhatsApp-first, not full omnichannel.
+
+MVP modules:
+
+- WhatsApp Cloud API inbox.
+- Multi-agent/team inbox with assignment, notes, labels, status, and conversation history.
+- Contact profile and simple CRM fields.
+- Quick replies and template manager.
+- Automation rules: assign to team, add label, send reply, notify employee, close conversation.
+- AI text agent for first-line support and sales.
+- AI voice-note agent:
+  - customer sends a WhatsApp voice note;
+  - system transcribes it;
+  - AI agent drafts or sends the answer;
+  - optional text reply or generated voice-note reply.
+- Human handoff when confidence is low or action is sensitive.
+- Billing dashboard: Meta pass-through fees, AI usage, platform plan, and budget cap.
+
+Add Instagram, Facebook, email, website chat, Telegram, and mobile apps after product-market fit.
+
+### AI text reply architecture
+
+Flow:
+
+1. WhatsApp user sends a message.
+2. Meta sends a WhatsApp webhook to our backend.
+3. Backend stores the event, customer, conversation, channel, and message.
+4. Cost router checks whether the 24-hour service window is open.
+5. AI orchestrator loads:
+   - client knowledge base;
+   - FAQs;
+   - products/services;
+   - policies;
+   - previous conversation context;
+   - customer profile;
+   - allowed tools.
+6. AI agent generates an answer with a confidence score and required actions.
+7. Guardrails decide:
+   - send automatically;
+   - ask human for approval;
+   - hand off to a team;
+   - ask the customer a clarifying question.
+8. System sends the message through WhatsApp Cloud API.
+9. Dashboard logs the answer, source context, cost classification, and employee/AI ownership.
+
+Recommended AI pattern:
+
+- Use an agent with tools for order lookup, booking lookup, CRM update, ticket creation, and handoff.
+- Use retrieval/file search for each client's knowledge base.
+- Keep system prompts per tenant and per use case.
+- Store all AI decisions in an audit log.
+
+Official OpenAI references:
+
+- Agents SDK: https://developers.openai.com/api/docs/guides/agents
+- File search / knowledge base retrieval: https://developers.openai.com/api/docs/guides/tools-file-search
+- Tools/function calling: https://developers.openai.com/api/docs/guides/tools
+
+### AI voice-note reply architecture
+
+For WhatsApp voice notes, use a chained voice workflow, not live speech-to-speech.
+
+Inbound voice-note flow:
+
+1. Customer sends a WhatsApp audio/voice message.
+2. WhatsApp webhook contains the inbound message event and media reference.
+3. Backend downloads the media from Meta's media endpoint.
+4. Store the original file in object storage with retention rules.
+5. Send the audio file to speech-to-text.
+6. Store the transcript in the conversation.
+7. Run the normal AI text agent on the transcript.
+8. Decide response format:
+   - text reply for speed and lower cost;
+   - voice reply if the client enabled voice AI or the customer used voice.
+9. If voice reply is enabled, generate TTS audio from the approved answer.
+10. Upload/send the audio through WhatsApp Cloud API.
+11. Keep transcript, generated answer, audio URL/media ID, cost, and approval state.
+
+Why this design:
+
+- WhatsApp voice notes are media messages, not a live microphone stream.
+- Chained voice gives us durable transcripts, moderation, approval, cost control, and better compliance.
+- OpenAI's voice-agent docs say a chained voice pipeline is better when the application needs explicit control over speech-to-text, text reasoning, and text-to-speech.
+
+Official references:
+
+- WhatsApp audio messages: https://developers.facebook.com/documentation/business-messaging/whatsapp/messages/audio-messages
+- WhatsApp media: https://developers.facebook.com/documentation/business-messaging/whatsapp/business-phone-numbers/media
+- WhatsApp webhooks: https://developers.facebook.com/documentation/business-messaging/whatsapp/webhooks/reference/messages
+- OpenAI voice agents: https://developers.openai.com/api/docs/guides/voice-agents
+- OpenAI speech-to-text: https://developers.openai.com/api/docs/guides/speech-to-text
+- OpenAI text-to-speech: https://developers.openai.com/api/docs/guides/text-to-speech
+
+### Human handoff rules
+
+The AI should not answer everything automatically.
+
+Automatic reply allowed:
+
+- FAQ.
+- Product information.
+- Order tracking.
+- Store hours/location.
+- Basic booking availability.
+- Lead qualification questions.
+- Returns policy explanation.
+
+Human approval required:
+
+- Refunds.
+- Cancellation.
+- Legal or medical advice.
+- Complaints.
+- Angry customer.
+- Payment disputes.
+- Price negotiation beyond configured limits.
+- Any answer with low confidence or missing source context.
+
+Blocked without explicit tool permission:
+
+- Taking payment.
+- Changing order status.
+- Cancelling subscription.
+- Editing customer data.
+- Making promises outside approved policy.
+
+### Pricing strategy for our version
+
+Recommended packages:
+
+| Package | Target customer | Included | Monthly fee idea |
+|---|---|---|---:|
+| Starter | Small business with one WhatsApp team | 1 WhatsApp number, 2 users, shared inbox, quick replies, labels, basic reports | 29-49 USD |
+| Growth | Active support/sales team | 5 users, automation builder, templates, basic AI text replies, broadcast controls | 79-149 USD |
+| Pro AI | Businesses wanting AI support | 15 users, AI agent, knowledge base, voice-note transcription, voice reply add-on, API access | 249-399 USD |
+| Enterprise | High volume / multi-branch | Unlimited or custom users, SLA, custom integrations, dedicated support, private deployment options | Custom |
+
+Usage charges:
+
+- Meta WhatsApp fees: pass-through by country/category.
+- AI text replies: included quota + overage.
+- Voice transcription: charged by audio minute or included quota.
+- Voice reply generation: charged by generated minute or included quota.
+- Storage: included retention period, paid long retention.
+- Setup: one-time onboarding and automation build fee.
+
+### 90-day execution plan
+
+Days 1-15:
+
+- Build WhatsApp webhook ingestion.
+- Build message sending for text, template, and audio.
+- Create conversation/contact schema.
+- Create simple shared inbox UI.
+- Add Meta pricing/pass-through fields to message ledger.
+
+Days 16-30:
+
+- Add team assignment, labels, notes, status, and quick replies.
+- Add template manager and service-window tracking.
+- Add basic reporting.
+- Add billing entities: tenant, plan, seats, AI usage, WhatsApp pass-through cost.
+
+Days 31-45:
+
+- Add AI text agent with tenant knowledge base.
+- Add human approval mode and confidence thresholds.
+- Add tools for test CRM/order lookup.
+- Add audit logs.
+
+Days 46-60:
+
+- Add voice-note pipeline: download audio, transcribe, store transcript, generate response.
+- Add optional TTS voice reply.
+- Add client settings for "text only", "draft only", or "auto-send".
+
+Days 61-90:
+
+- Pilot with 3-5 clients in different industries.
+- Measure deflection rate, response time, AI accuracy, human handoff rate, Meta message spend, and AI cost.
+- Package setup service and reseller program.
+- Prepare Tech Provider / App Review material.
+
+### What makes this business defensible
+
+- Arabic-first UI and Arabic support operations.
+- WhatsApp-first cost control, not generic omnichannel software.
+- Transparent Meta pass-through pricing.
+- AI agents trained per client, not one generic chatbot.
+- Voice-note support for MENA users who prefer voice over typing.
+- Human-in-the-loop controls for trust.
+- Agency/reseller model to grow faster than direct sales alone.
+
+### Main risks
+
+| Risk | Why it matters | Control |
+|---|---|---|
+| AI sends wrong answer | Can damage client trust | Human approval, confidence thresholds, source-based answers |
+| Voice transcription mistakes | Arabic dialects and noisy audio can be difficult | Store transcript, ask clarifying questions, test dialects, handoff low confidence |
+| WhatsApp policy violation | Can cause template rejection or account quality issues | Opt-in, correct category, template review, marketing limits |
+| Hidden AI cost | Heavy usage can destroy margin | AI quotas, overages, per-tenant cost dashboard |
+| Too many channels too early | Slows MVP | Start WhatsApp-first, add other channels after revenue |
+| Competing with mature platforms | Karzoun and others already have broad features | Differentiate with transparent pricing, AI voice, MENA focus, service quality |
+
 ## 11. System Architecture
 
 Required modules:
